@@ -14,12 +14,16 @@ export interface IProduct {
     price: number | null;
 }
 
+export type TPayment = 'card' | 'cash' | '';
+
 export interface IBuyer {
-    payment: 'card' | 'cash' | '';
+    payment: TPayment;
     email: string;
     phone: string;
     address: string;
 }
+
+export type TBuyerErrors = Partial<Record<keyof IBuyer, string>>;
 
 export interface IProductsResponse {
     total: number;
