@@ -471,4 +471,9 @@ type TBuyerErrors = Partial<Record<keyof IBuyer, string>>;
 - `contacts:submit` — отправка формы контактов.
 - `modal:open` — открытие модального окна.
 - `modal:close` — закрытие модального окна.
-- `success:close` — закрытие окна успешного оформления заказа.
+- `success:close` — закрытие окна успешного оформления заказа
+- `catalog:changed` — каталог товаров сохранён или обновлён
+- `preview:changed` — выбран товар для предпросмотра
+- `basket:changed` — корзина изменилась
+- `buyer:changed` — изменены данные покупателя
+- `formErrors:change` — изменились ошибки валидации формы
