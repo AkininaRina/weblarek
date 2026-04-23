@@ -7,6 +7,7 @@ export interface ICard {
   price: number | null;
   image: string;
   category: string;
+  description?: string;
 }
 
 export class Card extends Component<ICard> {
