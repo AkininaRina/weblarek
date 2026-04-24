@@ -1,26 +1,65 @@
-import { IEvents } from './base/Events';
-import { Card, ICard } from './Card';
+import { categoryMap } from '../utils/constants';
+import { Card } from './Card';
+
+interface ICardPreviewActions {
+	onClick: () => void;
+}
 
 export class CardPreview extends Card {
+	protected imageElement?: HTMLImageElement;
+	protected categoryElement?: HTMLElement;
+	protected descriptionElement?: HTMLElement;
 	protected buttonElement?: HTMLButtonElement;
 
-	constructor(container: HTMLElement, protected events: IEvents) {
+	constructor(container: HTMLElement, actions?: ICardPreviewActions) {
 		super(container);
 
-		this.buttonElement = this.container.querySelector('.card__button') ?? undefined;
+		this.imageElement =
+			this.container.querySelector('.card__image') ?? undefined;
 
-		this.buttonElement?.addEventListener('click', () => {
-			const id = this.container.dataset.id;
-			if (!id) {
-				return;
-			}
+		this.categoryElement =
+			this.container.querySelector('.card__category') ?? undefined;
 
-			if (this.buttonElement?.textContent === 'Удалить из корзины') {
-				this.events.emit('card:remove', { id });
-			} else {
-				this.events.emit('card:add', { id });
+		this.descriptionElement =
+			this.container.querySelector('.card__text') ?? undefined;
+
+		this.buttonElement =
+			this.container.querySelector('.card__button') ?? undefined;
+
+		if (actions?.onClick) {
+			this.buttonElement?.addEventListener('click', actions.onClick);
+		}
+	}
+
+	set image(value: string) {
+		if (this.imageElement) {
+			this.setImage(
+				this.imageElement,
+				value,
+				this.titleElement?.textContent || ''
+			);
+		}
+	}
+
+	set category(value: string) {
+		if (this.categoryElement) {
+			this.categoryElement.textContent = value;
+
+			Object.values(categoryMap).forEach((className) => {
+				this.categoryElement?.classList.remove(className);
+			});
+
+			if (value in categoryMap) {
+				const categoryClass = categoryMap[value as keyof typeof categoryMap];
+				this.categoryElement.classList.add(categoryClass);
 			}
-		});
+		}
+	}
+
+	set description(value: string) {
+		if (this.descriptionElement) {
+			this.descriptionElement.textContent = value;
+		}
 	}
 
 	set buttonText(value: string) {
@@ -33,13 +72,5 @@ export class CardPreview extends Card {
 		if (this.buttonElement) {
 			this.buttonElement.disabled = value;
 		}
-	}
-
-	render(data?: Partial<ICard>): HTMLElement {
-		if (data?.id) {
-			this.container.dataset.id = data.id;
-		}
-
-		return super.render(data);
 	}
 }

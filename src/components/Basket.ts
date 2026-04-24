@@ -48,8 +48,4 @@ export class Basket extends Component<IBasketView> {
 	set selected(value: number) {
 		this.orderButton.disabled = value === 0;
 	}
-
-	render(data?: Partial<IBasketView>): HTMLElement {
-		return super.render(data);
-	}
 }
